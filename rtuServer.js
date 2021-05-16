@@ -2,6 +2,9 @@
 // ------------------ Jean Tesla -------------------- //
 // ------------------ Jean Tesla -------------------- //
 
+const HEX = 16
+const DEC = 10
+
 const { crc16 } = require('easy-crc');
 const dataDictionary = require('./dataDictionary');
 const SerialPort = require('serialport');
@@ -12,7 +15,7 @@ const port = new SerialPort('COM12', {
 // --- A --- //
 port.on('readable', function () {
     const frame = port.read();
-    console.log(disassembleFrame(frame));
+    disassembleFrame(frame, rxRes);
 })
 // --- B --- //
 function setStateMachine(frame) {
@@ -22,17 +25,26 @@ function setStateMachine(frame) {
 }
 
 // --- C --- //
-function rxRes(frame) {
-    const data = Buffer.from([01, 01, 00, 01, 00, 01]);
-    checksum = crc16('MODBUS', data);
-    console.log(checksum.toString(16))
-
-    port.write([0x0001, 0x0003, 0x0002, 0x0000, 0x0003, 0x00f8, 0x0045]);
-    return 0xFFFF;
+function rxRes(brokenFrame, base = HEX) {
+    const rf = brokenFrame
+    let resFrame_array = [];
+    //console.log(checksum.toString(16))
+    resFrame_array.push(parseInt(rf.adress, 16))
+    resFrame_array.push(parseInt(rf.function, 16))
+    resFrame_array.push(parseInt(rf.dataAdress[0], 16))
+    resFrame_array.push(parseInt(rf.dataAdress[1], 16))
+    resFrame_array.push(parseInt(rf.numberOfRegisters[0], 16))
+    resFrame_array.push(parseInt(rf.numberOfRegisters[1], 16))
+    const checksum = crc16('MODBUS', resFrame_array).toString(HEX);
+    resFrame_array.push(parseInt(checksum.substring(0, 2).toString(DEC), HEX))
+    resFrame_array.push(parseInt(checksum.substring(2, 4).toString(DEC), HEX))
+    
+    port.write(new Buffer.from(resFrame_array))
 }
 
 // --- D --- //
-function disassembleFrame(frame) {
+function disassembleFrame(frame, resCallback) {
+    let brokenFrame;
     if (frame instanceof Buffer) {
         const countBytes = frame.length;
         const arrayBytes = Object.values(frame);
@@ -65,21 +77,23 @@ function disassembleFrame(frame) {
             countToPushDataContent++;
         }
         // --- 5 --- //
-        return {
-            adress: frame[0].toString(16),
-            function: frame[1].toString(16),
-            dataAdress: [frame[2].toString(16), frame[3].toString(16)],
-            numberOfRegisters: [frame[4].toString(16), frame[5].toString(16)],
-            byteCount: frame[6].toString(16),
+        brokenFrame = {
+            adress: frame[0].toString(HEX),
+            function: frame[1].toString(HEX),
+            dataAdress: [frame[2].toString(HEX), frame[3].toString(HEX)],
+            numberOfRegisters: [frame[4].toString(HEX), frame[5].toString(HEX)],
+            byteCount: frame[6].toString(HEX),
             dataContent,
             pdu,
-            checksum: [frame[countBytes - 2].toString(16), frame[countBytes - 1].toString(16)],
+            checksum: [frame[countBytes - 2].toString(HEX), frame[countBytes - 1].toString(HEX)],
             countBytesPda: countBytes,
-            countBytesPdu: pdu.length
+            countBytesPdu: pdu.length,
+            originFrame: frame
         }
     } else {
-        return {};
+        brokenFrame = {};
     }
+    resCallback(brokenFrame)
 }
 
 // --- E --- //
