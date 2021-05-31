@@ -1,16 +1,22 @@
 {
-  "name": "rtuServer",
-  "version": "1.0.0",
-  "description": "",
-  "main": "rtuServer.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "easy-crc": "0.0.2",
-    "serialport": "^9.0.7"
-  }
+    "name": "rtuServer",
+    "version": "1.0.0",
+    "description": "",
+    "main": "rtuServer.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "nodemonConfig": {
+        "ignore": ["test/*", "docs/*"],
+        "delay": "2500"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "easy-crc": "0.0.2",
+        "mysql": "^2.18.1",
+        "nodemon": "^2.0.7",
+        "serialport": "^9.0.7"
+    }
 }
