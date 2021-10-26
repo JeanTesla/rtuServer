@@ -17,7 +17,6 @@ const DEC = 10
 const { crc16 } = require('easy-crc');
 const { disassembleFrame } = require('./src/frameDeconstructor')
 const SerialPort = require('serialport');
-const api = require('./src/connections/api');
 
 
 const port = new SerialPort(CLP_PORT, {

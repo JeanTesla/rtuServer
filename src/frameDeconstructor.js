@@ -7,7 +7,7 @@ const disassembleFrame = function(frame) {
         if (!frame instanceof Buffer) throw new TypeError('O parâmetro passado não é um Buffer.')
         if (Buffer.from(frame).byteLength < 8) throw new RangeError('O Frame recebido não possui a quantidade de Bytes necessária para o funcionamento do script.')
 
-        const countBytes = frame.length - 30;
+        const countBytes = frame.length;
         const arrayBytes = Object.values(frame);
         const arrayDisregardIndices = [0, countBytes - 2, countBytes - 1];
         let pdu = [];
