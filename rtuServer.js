@@ -1,6 +1,7 @@
 const CLP_PORT = process.env.npm_package_config_CLP_PORT
 const CLP_REQ_FRAME = process.env.npm_package_config_CLP_REQ_FRAME
 
+
 console.log("Porta CLP configurada -> " + CLP_PORT)
 console.log("Frame de requisição configurado -> " +CLP_REQ_FRAME) //Sem Checksum
 console.log("Para alterar essas configurações, acesse a propriedade config em package.json")
@@ -17,6 +18,7 @@ const DEC = 10
 const { crc16 } = require('easy-crc');
 const { disassembleFrame } = require('./src/frameDeconstructor')
 const SerialPort = require('serialport');
+const berdiAPI = require('./src/serviceAPI')
 
 
 const port = new SerialPort(CLP_PORT, {
@@ -43,7 +45,12 @@ setInterval(function(){
 // --- A --- //
 port.on('readable', function () {
     const frame = port.read();
-    console.log(disassembleFrame(frame));
+    const frameJson = disassembleFrame(frame);
+    berdiAPI.send(frameJson).then(a=>{
+        console.log(a.data)
+    }).catch((err)=>{
+        console.error('erro' + err)
+    })
 });
 
 // --- E --- //

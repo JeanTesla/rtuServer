@@ -18,7 +18,7 @@ const disassembleFrame = function(frame) {
                 pdu.push(byte.toString(16));
             }
             // --- 2 --- //
-            if (i > 6 && i < countBytes - 2) {
+            if (i > 2 && i < countBytes - 2) {
                 arrayBytes_dataContent.push(byte.toString(16))
             }
         });
@@ -40,8 +40,8 @@ const disassembleFrame = function(frame) {
             adress: frame[0].toString(HEX),
             function: frame[1].toString(HEX),
             dataAdress: [frame[2].toString(HEX), frame[3].toString(HEX)],
-            numberOfRegisters: [frame[4].toString(HEX), frame[5].toString(HEX)],
-            byteCount: frame[6].toString(HEX),
+            //numberOfRegisters: [frame[4].toString(HEX), frame[5].toString(HEX)],
+            //byteCount: frame[6].toString(HEX),
             dataContent,
             pdu,
             checksum: [frame[countBytes - 2].toString(HEX), frame[countBytes - 1].toString(HEX)],

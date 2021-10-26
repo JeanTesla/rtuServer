@@ -9,7 +9,9 @@
     },
     "config": {
         "CLP_PORT": "COM5",
-        "CLP_REQ_FRAME": "0X01 0X03 0X10 0X0A 0X00 0X08"
+        "CLP_REQ_FRAME": "0X01 0X03 0X10 0X0A 0X00 0X08",
+        "BASE_URL": "http://www.berdiservicos.com/api",
+        "ENDPOINT": "/save_level"
     },
     "nodemonConfig": {
         "ignore": [
@@ -22,6 +24,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "axios": "^0.24.0",
         "easy-crc": "0.0.2",
         "nodemon": "^2.0.7",
         "serialport": "9.0.7"
