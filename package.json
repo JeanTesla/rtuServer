@@ -4,10 +4,18 @@
     "description": "",
     "main": "rtuServer.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start":"node ./rtuServer.js"
+    },
+    "config": {
+        "CLP_PORT": "COM5",
+        "CLP_REQ_FRAME":"0X01 0X03 0X10 0X0A 0X00 0X08"
     },
     "nodemonConfig": {
-        "ignore": ["test/*", "docs/*"],
+        "ignore": [
+            "test/*",
+            "docs/*"
+        ],
         "delay": "2500"
     },
     "keywords": [],
@@ -15,8 +23,7 @@
     "license": "ISC",
     "dependencies": {
         "easy-crc": "0.0.2",
-        "mysql": "^2.18.1",
         "nodemon": "^2.0.7",
-        "serialport": "^9.0.7"
+        "serialport": "9.0.7"
     }
 }
