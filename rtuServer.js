@@ -19,7 +19,7 @@ const SerialPort = require('serialport');
 const berdiAPI = require('./src/serviceAPI')
 
 
-const port = new SerialPort(CLP_PORT, {
+const port = new SerialPort(env.CLP_PORT, {
     baudRate: 19200,
     dataBits: 8,
     parity: 'none',
