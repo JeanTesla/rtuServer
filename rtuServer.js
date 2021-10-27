@@ -1,10 +1,8 @@
-const CLP_PORT = process.env.npm_package_config_CLP_PORT
-const CLP_REQ_FRAME = process.env.npm_package_config_CLP_REQ_FRAME
+const env = require('./env')
 
-
-console.log("Porta CLP configurada -> " + CLP_PORT)
-console.log("Frame de requisição configurado -> " +CLP_REQ_FRAME) //Sem Checksum
-console.log("Para alterar essas configurações, acesse a propriedade config em package.json")
+console.warn("Porta CLP configurada -> " + env.CLP_PORT)
+console.warn("Frame de requisição configurado -> " + env.CLP_REQ_FRAME) //Sem Checksum
+console.warn("Para alterar essas configurações, acesse a propriedade config em package.json")
 
 
 // ------------------ Jean Tesla -------------------- //
@@ -47,19 +45,8 @@ port.on('readable', function () {
     const frame = port.read();
     const frameJson = disassembleFrame(frame);
     berdiAPI.send(frameJson).then(a=>{
-        console.log(a.data)
+        //console.log(a.data)
     }).catch((err)=>{
         console.error('erro' + err)
     })
 });
-
-// --- E --- //
-let countObtainedTx = 0;
-
-function showTx(frame) {
-    let stringBuffer = '';
-    frame.forEach(element => {
-        stringBuffer += element.toString(16) + ' '
-    });
-    console.log(`${++countObtainedTx}  |  ${stringBuffer}`)
-}
