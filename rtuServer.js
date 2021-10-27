@@ -30,7 +30,7 @@ const port = new SerialPort(env.CLP_PORT, {
 setInterval(function(){
     let reqFrame_array = [];
     // Obtém o frame de solicitação configurado e transforma em Buffer
-    CLP_REQ_FRAME.split(' ').forEach(byte =>{
+    env.CLP_REQ_FRAME.split(' ').forEach(byte =>{
         reqFrame_array.push(byte)
     })
     const checksum = crc16('MODBUS', reqFrame_array).toString(HEX);
